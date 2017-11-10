@@ -129,7 +129,7 @@ public class LogDataController {
 
 			blockedIP.setBlockedDate(new Timestamp(System.currentTimeMillis()));
 			blockedIP.setComment("IP " + ip + " Blocked at " + blockedIP.getBlockedDate() + " for exceeding "
-					+ threshold + " connections " + duration + " beginning at " + startDate);
+					+ thresholdLong + " connections " + duration + " beginning at " + startDate);
 			blockedIP.setIp(ip);
 
 			blockEntityList.add(blockedIP);
