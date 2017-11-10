@@ -32,7 +32,7 @@ public class LogDataController {
 	BlockedIPRepository blockRepository;
 
 	/**
-	 * Empties the LOG_ENTRY table and repopulates it with data from filename
+	 * Empties the LOG_ENTRY table and repopulates it with data from local file
 	 * 
 	 * @param filename
 	 */
@@ -89,6 +89,7 @@ public class LogDataController {
 		Date startDate;
 
 		try {
+			//parse start date 
 			startDate = LogEntry.DATE_FORMAT_CMD.parse(startDateStr);
 
 		} catch (ParseException pe) {
@@ -96,6 +97,7 @@ public class LogDataController {
 			return;
 		}
 
+		// create end date from start and duration parameters
 		int calendarField;
 		if (duration.equalsIgnoreCase("hourly")) {
 			calendarField = Calendar.HOUR_OF_DAY;
@@ -112,10 +114,13 @@ public class LogDataController {
 
 		Date endDate = c.getTime();
 
+		//parse threshold 
 		long thresholdLong = Long.parseLong(threshold);
 
+		//retrieve list of ips to add to block table
 		List<String> ipsToBlock = entryRepository.findIpByThreshold(startDate, endDate, thresholdLong);
 
+		//create block table entries
 		List<BlockedIP> blockEntityList = new ArrayList<BlockedIP>();
 
 		for (String ip : ipsToBlock) {
@@ -124,13 +129,14 @@ public class LogDataController {
 
 			blockedIP.setBlockedDate(new Timestamp(System.currentTimeMillis()));
 			blockedIP.setComment("IP " + ip + " Blocked at " + blockedIP.getBlockedDate() + " for exceeding "
-					+ thresholdLong + " connections " + duration + " beginning at " + startDate);
+					+ threshold + " connections " + duration + " beginning at " + startDate);
 			blockedIP.setIp(ip);
 
 			blockEntityList.add(blockedIP);
 
 		}
 
+		//commit to block table
 		blockRepository.save(blockEntityList);
 
 		printBlockedIPsToConsole(blockEntityList);

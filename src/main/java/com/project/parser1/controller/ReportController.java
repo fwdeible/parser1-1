@@ -18,6 +18,10 @@ public class ReportController {
 	@Autowired
 	private BlockedIPRepository blockedRepo;
 	
+	/**
+	 * 
+	 * @return JSON representation of entire block table
+	 */
 	@GetMapping(path="/blocked")
 	public @ResponseBody Iterable<BlockedIP> getAllLogEntries() {
 		return blockedRepo.findAll();

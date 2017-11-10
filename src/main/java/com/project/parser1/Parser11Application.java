@@ -14,12 +14,10 @@ public class Parser11Application {
 	
 	public static void main(String[] args) {
 
-		log.debug("Application main");
-		
 		//startup and handles command line args
 		ApplicationContext context = SpringApplication.run(Parser11Application.class, args);
 
-		//Application will terminate automatically after runtime unless told otherwise
+		//Application will terminate automatically after runtime unless keepAlive flag is included at cmd line
 		if (!Arrays.asList(args).contains("keepAlive")) {
 			SpringApplication.exit(context);
 		}

@@ -24,7 +24,7 @@ public class LogEntry implements Serializable{
     private Integer id;
         
     /*
-     * file data
+     * log file data
      */
     private Timestamp date;
     private String ip;
